@@ -27,8 +27,7 @@ export default function Home() {
           </div>
           <div
             className={
-              "md:flex flex-grow items-center" +
-              (navbarOpen ? " flex" : " hidden")
+              "md:flex flex-grow items-center"
             }
           >
             <nav className="flex-col flex-grow ">
