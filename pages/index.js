@@ -58,7 +58,7 @@ export default function Home() {
             </p>
             <div className="flex justify-center">
               <button
-                className="bg-gray-800 inline-flex items-center px-5 py-3 mt-2 font-medium text-white transition duration-500 ease-in-out transform bg-transparent border rounded-lg bg-gray-900"
+                className="inline-flex items-center px-5 py-3 mt-2 font-medium text-white transition duration-500 ease-in-out transform border rounded-lg bg-gray-900"
               >
                 <span className="justify-center">Pimp my profile</span>
               </button>
