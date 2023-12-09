@@ -13,7 +13,6 @@ export default async function handler(req) {
   if (req.method === "POST") {
     try {
       const data = await req.json();
-      console.log(data)
       const imagesToOpenAi = data.map((base64String) => {
         return {
           type: "image_url",
@@ -22,12 +21,40 @@ export default async function handler(req) {
       });
       const response = await openai.chat.completions.create({
         model: "gpt-4-vision-preview",
-        max_tokens: 3000,
+        max_tokens: 4095,
+        temperature: 0,
         messages: [
           {
             role: "system",
             content:
-              "You are a helpful dating profile grading and tuning assistant.",
+              `You are a helpful dating profile grading and tuning assistant. All of your responses should be in markdown format and follow this schema: 
+              
+              #Profile Pictures:
+                -any feedback related to profile pictures 
+                -any feedback related to profile pictures 
+                -any feedback related to profile pictures 
+              
+              #bio:
+                -any feedback related to bio 
+                -any feedback related to bio 
+                -any feedback related to bio 
+              
+              #conversations:
+                - "any feedback related to conversations
+                - "any feedback related to conversations
+                - "any feedback related to conversations
+              
+              #profile:
+                -any feedback related to profile
+                -any feedback related to profile
+                -any feedback related to profile
+              
+              #interactions:
+                -any feedback related to interactions
+                -any feedback related to interactions
+                -any feedback related to interactions
+              
+              make sure it is well written and include details to your feedback to help the user improve their profile and dating experience.`,
           },
           {
             role: "user",

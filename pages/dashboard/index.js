@@ -6,17 +6,17 @@ import { toBase64 } from "components/helpers/files";
 
 export default function Home() {
   const [images, setImages] = useState([]);
-  const [disableUpload, setDisableUpload] = useState(false);
+  const [step, setStep] = useState(1);
   const [feedback, setFeedback] = useState("");
+
   const handleUploads = (_images) => {
-    if (_images.length === 5) {
-      setDisableUpload(true);
-    } else {
-      setDisableUpload(false);
-    }
     setImages(_images);
+    if (_images.length > 0) {
+      setStep(2);
+    }
   };
-  const submitFeedback = async () => {
+
+  const uploadImages = async () => {
     const filesToUpload = await Promise.all(
       images.map((img) => {
         return toBase64(img);
@@ -28,33 +28,35 @@ export default function Home() {
       data: filesToUpload,
     });
     setFeedback(response.data.feedback);
+    setStep(3);
   };
+
   return (
     <div className="flex flex-col items-center">
-      <div className="text-center">
-        <h1>Dashboard</h1>
-      </div>
-      <div className="flex justify-evenly">
-        {images.map((img, i) => {
-          return <Picture key={i} image={img} />;
-        })}
-      </div>
-      <Upload handleUploads={handleUploads} disabled={disableUpload} />
-      <button
-        className="bg-green-600 text-white w-1/2 mt-10"
-        onClick={submitFeedback}
-        disabled={images.length === 0}
-      >
-        Submit for Feedback
-      </button>
-      {
-        feedback && (
+      <div className="flex w-full h-[100vh] items-center justify-center align-center">
+        {step === 1 && (
+          <Upload handleUploads={handleUploads} />
+        )}
+        {step === 2 && (
           <div>
+            {images.map((img, i) => {
+              return <Picture key={i} image={img} />;
+            })}
+            <button
+              className="bg-blue-600 text-white w-1/2 mt-10"
+              onClick={uploadImages}
+            >
+              Upload Images
+            </button>
+          </div>
+        )}
+        {step === 3 && feedback && (
+          <div className="m-5">
             <h1>Feedback</h1>
             <p>{feedback}</p>
           </div>
-        )
-      }
+        )}
+      </div>
     </div>
   );
 }
