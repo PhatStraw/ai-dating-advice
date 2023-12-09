@@ -1,12 +1,13 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import Upload from "components/components/Upload";
 import Picture from "components/components/Picture";
 import axios from "axios";
 import { toBase64 } from "components/helpers/files";
 
 export default function Home() {
-  const [images, setImages] = useState([])
-  const [disableUpload, setDisableUpload] = useState(false)
+  const [images, setImages] = useState([]);
+  const [disableUpload, setDisableUpload] = useState(false);
+  const [feedback, setFeedback] = useState("");
   const handleUploads = (_images) => {
     if (_images.length === 5) {
       setDisableUpload(true);
@@ -14,13 +15,20 @@ export default function Home() {
       setDisableUpload(false);
     }
     setImages(_images);
-  }
+  };
   const submitFeedback = async () => {
-    const filesToUpload = await Promise.all(images.map((img) => {
-      return toBase64(img)
-    }))
-    await axios({ url: "/api/upload", method: "POST", data: filesToUpload });
-  }
+    const filesToUpload = await Promise.all(
+      images.map((img) => {
+        return toBase64(img);
+      })
+    );
+    const response = await axios({
+      url: "/api/upload",
+      method: "POST",
+      data: filesToUpload,
+    });
+    setFeedback(response.data.feedback);
+  };
   return (
     <div className="flex flex-col items-center">
       <div className="text-center">
@@ -39,6 +47,14 @@ export default function Home() {
       >
         Submit for Feedback
       </button>
+      {
+        feedback && (
+          <div>
+            <h1>Feedback</h1>
+            <p>{feedback}</p>
+          </div>
+        )
+      }
     </div>
   );
 }

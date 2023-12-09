@@ -1,20 +1,26 @@
-require('dotenv').config()
-const OpenAI = require('openai');
+const OpenAI = require("openai");
+import { NextResponse } from "next/server";
+
 // Initialize the OpenAI API with your API key
 const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"],
 });
 
-export default function handler(req, res) {
-  if (req.method === 'POST') {
-    const imagesToOpenAi = req.body.map((base64String) => {
-      return {
-        type: "image_url",
-        image_url: { url: base64String },
-      };
-    })
-    openai.chat.completions
-      .create({
+// IMPORTANT! Set the runtime to edge
+export const runtime = "edge";
+
+export default async function handler(req) {
+  if (req.method === "POST") {
+    try {
+      const data = await req.json();
+      console.log(data)
+      const imagesToOpenAi = data.map((base64String) => {
+        return {
+          type: "image_url",
+          image_url: { url: base64String },
+        };
+      });
+      const response = await openai.chat.completions.create({
         model: "gpt-4-vision-preview",
         max_tokens: 3000,
         messages: [
@@ -34,18 +40,20 @@ export default function handler(req, res) {
             ],
           },
         ],
-      })
-      .then((response) => {
-        const feedback = response.choices[0].message.content
-        if(feedback === 'No') {
-          res.sendStatus(400);
-          return
-        }
-        res.sendStatus(201);
-      })
-      .catch((error) => {
-        console.error(error);
       });
-    return
+
+      const feedback = response.choices[0].message.content;
+      console.log(feedback);
+      if (feedback === "No") {
+        return NextResponse.json(
+          { error: "No feedback provided" },
+          { status: 400 }
+        );
+      }
+      return NextResponse.json({ feedback }, { status: 201 });
+    } catch (error) {
+      console.error(error);
+      return NextResponse.json({ error }, { status: 401 });
+    }
   }
 }
