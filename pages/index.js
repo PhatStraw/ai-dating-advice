@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <div className="fixed top-0 w-full z-30 clearNav md:bg-opacity-90 transition duration-300 ease-in-out">
-        <div className="flex flex-col max-w-6xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+        <div className="flex flex-row max-w-6xl px-4 mx-auto items-center justify-between md:flex-row md:px-6 lg:px-8">
           <div className="flex flex-row items-center justify-between p-4">
             <Link
               href="/"
@@ -17,13 +17,6 @@ export default function Home() {
                 PMP
               </h1>
             </Link>
-            <button
-              className=" cursor-pointer leading-none px-3 py-1 md:hidden outline-none focus:outline-none "
-              type="button"
-              aria-label="button"
-            >
-              Pimp my profile
-            </button>
           </div>
           <div
             className={

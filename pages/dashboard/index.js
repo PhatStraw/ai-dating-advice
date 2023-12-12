@@ -31,22 +31,34 @@ export default function Home() {
     setStep(3);
   };
 
+  const goBack = () => {
+    if (step > 1) {
+      setStep(step - 1);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center">
       <div className="flex w-full h-[100vh] items-center justify-center align-center">
-        {step === 1 && (
-          <Upload handleUploads={handleUploads} />
-        )}
+        {step === 1 && <Upload handleUploads={handleUploads} />}
         {step === 2 && (
           <div>
-            {images.map((img, i) => {
-              return <Picture key={i} image={img} />;
-            })}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {images.map((img, i) => {
+                return <Picture key={i} image={img} />;
+              })}
+            </div>
             <button
-              className="bg-blue-600 text-white w-1/2 mt-10"
+              className="bg-blue-600 text-white w-full m-1 p-4 md:m-4  mt-10"
               onClick={uploadImages}
             >
               Upload Images
+            </button>
+            <button
+              className="bg-red-600 text-white w-full m-1 p-4 md:m-4"
+              onClick={goBack}
+            >
+              Go Back
             </button>
           </div>
         )}

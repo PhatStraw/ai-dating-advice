@@ -30,7 +30,7 @@ function Upload({ handleUploads, disabled }) {
 
   return (
     <div className="flex flex-col items-center">
-      <h1 className="font-bold text-xl m-5">Upload Screenshots of Your Profile</h1>
+      <h1 className="font-bold text-xl m-5">Upload Screenshots of Your Dating Profile</h1>
       <input
         type="file"
         accept="image/*"
